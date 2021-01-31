@@ -2,11 +2,11 @@ type: install
 name: Directus with MariaDB
 
 globals:
-  DB_NAME: "directus"
-  DB_USER: "directus_user"
-  DB_PASS: "${fn.password(12)}"
-  DIRECTUS_USER: "${user.email}"
-  DIRECTUS_PASS: "${fn.password(12)}"
+  DB_NAME: directus
+  DB_USER: directus_user
+  DB_PASS: ${fn.password(12)}
+  DIRECTUS_USER: ${user.email}
+  DIRECTUS_PASS: ${fn.password(12)}
 
 nodes:
   - nodeType: mariadb-dockerized
@@ -21,11 +21,11 @@ onInstall:
       nodeGroup: sqldb
       loginCredentials:
         user: root
-        password: "${nodes.sqldb.password}"
-      newDatabaseName: "${globals.DB_NAME}"
+        password: ${nodes.sqldb.password}
+      newDatabaseName: ${globals.DB_NAME}
       newDatabaseUser:
-        name: "${globals.DB_USER}"
-        password: "${globals.DB_PASS}" 
+        name: ${globals.DB_USER}
+        password: ${globals.DB_PASS}
   - addNodes:
       nodeType: docker
       nodeGroup: cp
@@ -42,11 +42,11 @@ onInstall:
         DB_CLIENT: mysql
         DB_HOST: ${nodes.sqldb.address}
         DB_PORT: 3306
-        DB_USER: "${globals.DB_USER}"
-        DB_PASSWORD: "${globals.DB_PASS}"
-        DB_DATABASE: "${globals.DB_NAME}"
-        ADMIN_EMAIL: "${globals.DIRECTUS_USER}"
-        ADMIN_PASSWORD: "${globals.DIRECTUS_PASS}"
+        DB_USER: ${globals.DB_USER}
+        DB_PASSWORD: ${globals.DB_PASS}
+        DB_DATABASE: ${globals.DB_NAME}
+        ADMIN_EMAIL: ${globals.DIRECTUS_USER}
+        ADMIN_PASSWORD: ${globals.DIRECTUS_PASS}
   - addEndpoint
   - return:
       result: success
@@ -63,7 +63,7 @@ actions:
         publicPort: ${response.object.publicPort}
         
 success: |
-  Your Directus app is successfully installed. Please open the admin URL below and login with your credentials.
+  Your Directus app is successfully installed.
   **URL**: http://node${nodes.cp.id}-${env.domain}:${globals.publicPort}
   **User**: ${globals.DIRECTUS_USER}
   **Pass**: ${globals.DIRECTUS_PASS}
